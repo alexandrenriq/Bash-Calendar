@@ -1,6 +1,11 @@
 #!/bin/bash
-GREEN="\033[0;32m"
+
+# TODO: support for flags (show the calendar of a month and year)
+
+CGREEN="\033[0;32m"
 BGREEN="\033[0;102m"
+BGREEN_CBLACK="\033[0;30;102m"
+
 NOCOLOR="\033[0m"
 C_MONTH=$(date +%b)
 C_YEAR=$(date +%Y)
@@ -8,6 +13,7 @@ C_DAY=$(date +%d)
 M_ARRAY=('Jan:1' 'Feb:2' 'Mar:3' 'Apr:4' 'May:5' 'Jun:6'
          'Jul:7' 'Aug:8' 'Sep:9' 'Oct:10' 'Nov:11' 'Dec:12')
 N_DAYS=('31' '28' '31' '30' '31' '30' '31' '31' '30' '31' '30' '31')
+
 get_month_number() {
     m=$1
     for month in "${M_ARRAY[@]}" ; do
@@ -53,8 +59,12 @@ get_day_of_week() {
     echo $day
 }
 print_month() {
+    if [ "$1" == "-h " ]; then
+        echo "Hola"
+        exit 0
+    fi
     wdays=('Su' 'Mo' 'Tu' 'We' 'Th' 'Fr' 'Sa')
-    echo -e "${GREEN}\c"
+    echo -e "${CGREEN}\c"
     printf "%0.s " {1..6}
     echo -e "$C_MONTH $C_YEAR"
     for d in "${wdays[@]}"; do
@@ -71,7 +81,7 @@ print_month() {
     day_of_week_counter=$fd
     for d in `eval echo {1..$(($(last_day_month)))}`
     do
-        echo -e "${BGREEN}\c"
+        echo -e "${BGREEN_CBLACK}\c"
         if [ $d -ne $((C_DAY)) ]
         then
             echo -e "${NOCOLOR}\c"
@@ -95,14 +105,14 @@ print_month() {
 print_month
 
 
-if [ ! -e calendar.dat ]; then
-    echo  > calendar.dat
-else
-    echo  >> calendar.dat
-fi
-filename="calendar.dat"
-n=1
-while read line; do
-#echo "Linea No. $n : $line"
-n=$((n+1))
-done < $filename
+# if [ ! -e calendar.dat ]; then
+#     echo  > calendar.dat
+# else
+#     echo  >> calendar.dat
+# fi
+# filename="calendar.dat"
+# n=1
+# while read line; do
+# #echo "Linea No. $n : $line"
+# n=$((n+1))
+# done < $filename
